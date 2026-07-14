@@ -1,0 +1,39 @@
+{
+  "name": "suzukird-website",
+  "version": "1.0.0",
+  "description": "SuzukiRD backend API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@cloudinary/react": "^1.14.4",
+    "@cloudinary/url-gen": "^1.22.0",
+    "@sentry/react": "^10.51.0",
+    "axios": "^1.17.0",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.10.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.14.0",
+    "mongodb": "^7.4.0",
+    "mongoose": "^9.5.0",
+    "multer": "^2.1.1",
+    "multer-storage-cloudinary-v2": "^1.0.3",
+    "node-cron": "^4.5.0",
+    "nodemailer": "^9.0.3",
+    "stripe": "^22.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

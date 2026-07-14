@@ -1,0 +1,44 @@
+.product-card:hover {
+    border: 1px solid #e8161b;
+    box-shadow: 0 4px 20px rgba(232, 22, 27, 0.5);
+}
+.category-btns:hover {
+    box-shadow: 0 4px 20px rgba(232, 22, 27,0.12);
+    transform: translateY(-5px);
+}
+.close-modal-btn{
+    color: white;
+}
+.close-modal-btn:hover{
+    color: red;
+}
+.add-to-cart-btn {
+    width: 100%;
+    padding: 14px 0;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.add-to-cart-btn:enabled {
+    background: #e8161b;
+    color: white;
+    cursor: pointer;
+}
+
+.add-to-cart-btn:disabled {
+    background: #2a2a2a;
+    color: #555;
+    cursor: not-allowed;
+}
+.add-to-cart-btn:enabled:hover {
+    background: #e2b7b9;
+}

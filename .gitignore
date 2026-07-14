@@ -1,0 +1,18 @@
+node_modules/
+.env
+.env.local
+.env.*local
+# dependencies
+node_modules/
+
+# env files — anywhere in the project (root, admin/, frontend/)
+.env
+.env.*
+**/.env
+**/.env.*
+
+# build output
+dist/
+
+# misc
+.DS_Store

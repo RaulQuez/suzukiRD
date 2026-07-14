@@ -1,0 +1,7 @@
+/* 
+    index.css — loaded once globally before anything else.
+    We keep this minimal since App.css handles the actual styling.
+
+ *, *::before, *::after {
+    box-sizing: border-box;
+}
