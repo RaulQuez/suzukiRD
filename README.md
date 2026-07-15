@@ -1,3 +1,4 @@
+<img width="2866" height="1478" alt="Screenshot 2026-07-15 155453" src="https://github.com/user-attachments/assets/e36cc1a0-c39c-4203-b518-39f551e515f0" />
 # Suzuki Racing Development Performance Parts E-Commerce Platform
 A full-stack e-commerce platform for performance auto parts including: a customer storefront, a token secured admin dashboard and an Express/Node API backend with Stripe payments, live UPS shipping rates using an API, Cloudinary media, and Nodemailer for transactional emails.
 LIVE DEMO: <img width="2880" height="1472" alt="Screenshot 2026-07-15 154854" src="https://github.com/user-attachments/assets/f0391739-5431-4ffa-bb99-2717e129612e" /><img width="2880" height="1482" alt="Screenshot 2026-07-15 155222" src="https://github.com/user-attachments/assets/fa2078d9-5477-41f4-a320-55fc32046fda" /><img width="2880" height="1484" alt="Screenshot 2026-07-15 155907" src="https://github.com/user-attachments/assets/838018bb-6153-4af9-a74a-995d75b1d125" />
