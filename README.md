@@ -36,4 +36,18 @@ Admin Side: JWT login, product CRUD with Cloudinary image upload, active/inactiv
 
 # Highlights
 - Server side price and shipping recomputation: client submitted amounts are NEVER trusted therfore order totals and UPS shipping are calculated from the database at checkout to prevent cart & shipping cost tampering.
-- Atomic stock reservation: inventory is decremented 
+- Atomic stock reservation: inventory is decremented with a conditional {findOneAndUpdate({stock: { $gte: qty }}, {$inc: { stock: -qty } }) and rolled back during partial failure to eliminate overselling under concurrent checkout.
+- Stripe source of truth: payments are confirmed by signature verified webhooks (NOT THE CLIENT) and each paymentIntent is bound to its order via metadata so one payment can never confirm another order and confirmation is idempotent through an atomic claim so duplicate webhook deliveries can't double process
+- Abandoned order sweep: a scheduled job releases a reserved stock from unpaid orders after a specific timeout  with a guard that rereserves or refunds if payment lands on an already expired order
+- Defence in depth: tiered rate limiting (login / write / general) behind a trusted proxy, regex escaping to prevent ReDoS in search, request body size length limits, email header injection security & sanitization, restricted Cloudinary uploads (type+size) and enumeration safe order tracking.
+
+# Architecture
+2 independent React apps, storefront + admin, that communicates with 1 Express API over a CORS allowlist. The API is the single owner of all business logic including database operations. Frontends NEVER calculate or authorize.
+
+
+A single optionalAuth middleware allows 1 product endpoint to serve active only products to customers and all products to authenticated admins with no duplicated routes
+
+# Environment Variables
+Configuration is supplied via environment variables (see .env.example). Secrets are never committed; production values live in the hosting platforms' encrypted variable stores.
+
+Raul Henriquez
