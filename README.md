@@ -30,3 +30,10 @@ Auth - JWT & bcrypt
 Infra - Railway (API), Netlify (the frontends), MongoDB Atlas
 
 # Features
+Customer Side: browsing, search, filtering, cart, stripe, checkout, guest order tracking, automated status emails with UPS tracking links
+
+Admin Side: JWT login, product CRUD with Cloudinary image upload, active/inactive product visiblity toggling, order management, status updates that trigger customer emails, UPS tracking number entry.
+
+# Highlights
+- Server side price and shipping recomputation: client submitted amounts are NEVER trusted therfore order totals and UPS shipping are calculated from the database at checkout to prevent cart & shipping cost tampering.
+- Atomic stock reservation: inventory is decremented 
