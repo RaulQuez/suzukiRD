@@ -401,7 +401,7 @@ const ProductsPage = () => {
                         ) : (<div style ={{width:40, height: 40, borderRadius: 6, background:"#222", border: "0.5px solid #2a2a2a"}}></div>)}
                     </td>
 
-                    <td className="product-name">{product.name}  
+                    <td className="product-name">{product.name} ID: {product._id}  
                     </td>
                     
                     <td>
