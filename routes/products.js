@@ -221,7 +221,7 @@ router.post("/", authenticate, async (req,res) => {
             it prevents someone from injecting unexpected fields like "isAdmin: true".
             ONLY 6 FIELDS WILL EVER BE WRITTEN INTO THE DB FROM THIS ROUTE  
         */
-       const { name, category, price, stock, description, imageUrl, variants } = req.body;
+       const { name, pID, category, price, stock, description, imageUrl, variants } = req.body;
 
        // validation - 400 means bad request meaning the client sent something wrong
        if (!name || !category || price === undefined) {
@@ -235,6 +235,7 @@ router.post("/", authenticate, async (req,res) => {
        // new product({}) creates a mongoose document instance in memory, it doesnt touch the database yet but builds the object and runs the shcema validators (required,enum,min,ect)
        const product = new Product({
         name,
+        pID: pID ?? "",
         category,
         price,
         stock: stock ?? 0,  // ?? is nullish coalescing - if stock is null/undefined default to 0, we use ?? instead of || because || would also default if stock === 0 - valid
@@ -296,7 +297,7 @@ router.patch("/:id", authenticate, async (req,res) => {
         result = { price: 299, stock: 12 }   <- _id was stripped out
     */
         
-        const allowedFields = ["name", "category", "price", "stock", "description", "imageUrl", "variants", "weight", "dimensions.length", "dimensions.width", "dimensions", "isActive"];
+        const allowedFields = ["name", "pID", "category", "price", "stock", "description", "imageUrl", "variants", "weight", "dimensions.length", "dimensions.width", "dimensions", "isActive"];
         const updates = Object.keys(req.body).reduce((acc, key) => {
             /*
             acc is the accumulator - object being build each loop.

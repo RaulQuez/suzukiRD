@@ -32,6 +32,7 @@ const CATEGORIES = [
 // empty form (default state for add/edit modal form) defined outside component so its not recreated on every render. 
 const EMPTY_FORM = {
     name: "",
+    pID: "",
     category: "",
     price: "",
     stock: "",
@@ -152,6 +153,7 @@ const ProductsPage = () => {
         setEditingProduct(product);
         setForm({
             name: product.name,
+            pID: product.pID || "",
             category: product.category,
             price:  String(product.price),
             stock: String(product.stock),
@@ -209,6 +211,7 @@ const ProductsPage = () => {
             // build payload - convert price and stock from strings (form input always return strings) back to numbers by Number().
             const payload = {
                 name: form.name.trim(),
+                pID: form.pID.trim(),
                 category: form.category,
                 price: Number(form.price),
                 stock: Number(form.stock),
@@ -401,7 +404,7 @@ const ProductsPage = () => {
                         ) : (<div style ={{width:40, height: 40, borderRadius: 6, background:"#222", border: "0.5px solid #2a2a2a"}}></div>)}
                     </td>
 
-                    <td className="product-name">{product.name} ID: {product._id}  
+                    <td className="product-name">{product.name} ID: {product.pID}  
                     </td>
                     
                     <td>
@@ -473,6 +476,16 @@ const ProductsPage = () => {
                     value={form.name}
                     onChange={handleFormChange}
                     placeholder="Product name"
+                    required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <input
+                    name="pID"
+                    value={form.pID}
+                    onChange={handleFormChange}
+                    placeholder="Product ID"
                     required
                     />
                 </div>

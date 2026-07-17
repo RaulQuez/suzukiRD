@@ -16,6 +16,11 @@ const productSchema = new mongoose.Schema(
         required: [true, "Product name is required"],
         trim: true, // automatically strips leading/trailing whitespaces on save
     },
+    // client based ID 
+    pID: {
+        type: String,
+        default: "",
+    },
     // category must match one of the 8 labels
     // enum is mongo's way of saying only these values are allowed, if you try to save category: wheels, mongoose throws an error
     category: {
