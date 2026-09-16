@@ -48,6 +48,6 @@ Admin Side: JWT login, product CRUD with Cloudinary image upload, active/inactiv
 A single optionalAuth middleware allows 1 product endpoint to serve active only products to customers and all products to authenticated admins with no duplicated routes
 
 # Environment Variables
-Configuration is supplied via environment variables (see .env.example). Secrets are never committed; production values live in the hosting platforms' encrypted variable stores.
+Configuration is supplied via environment variables (see .env.example). Secrets are never committed.
 
 Raul Henriquez
