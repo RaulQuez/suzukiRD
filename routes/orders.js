@@ -18,7 +18,7 @@ import authenticate from '../middleware/authenticate.js';
 import nodemailer from "nodemailer";
 import Stripe from "stripe"
 import { cleanHeader, isValidEmail } from '../utils/sanitize.js';
-import { sendOrderEmails } from '../utils/orderEmails.js';   
+import { sendOrderEmails, sendPaymentMismatchAlert, sendPaymentReviewEmail } from '../utils/orderEmails.js';   
 import { calculateShipping, ShippingError } from "../utils/calculateShipping.js";
 import { reReserveStock } from "../utils/stock.js";
 
@@ -285,6 +285,10 @@ router.patch("/:id/confirm-payment", async (req, res) => {
         const expectedCents = Math.round((order.totalPrice + order.shippingCost) * 100);
         if (paymentIntent.amount !== expectedCents) {
             console.warn(`Payment amount mismatch on order ${order._id}: expected ${expectedCents}, got ${paymentIntent.amount}`);
+            sendPaymentMismatchAlert({ orderId: order._id, expectedCents, actualCents: paymentIntent.amount, source: "confirm-payment" })
+                .catch(err => console.error("Mismatch alert email failed:", err.message));
+            sendPaymentReviewEmail(order)
+                .catch(err => console.error("Customer review email failed:", err.message));
             return res.status(400).json({ error: "Payment amount mismatch" });
         }
 

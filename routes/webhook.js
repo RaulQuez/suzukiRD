@@ -15,7 +15,7 @@ import express from "express";
 import Stripe from "stripe";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
-import { sendOrderEmails } from "../utils/orderEmails.js";
+import { sendOrderEmails, sendPaymentMismatchAlert, sendPaymentReviewEmail } from "../utils/orderEmails.js";
 import { reReserveStock } from "../utils/stock.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -48,6 +48,10 @@ router.post("/", async (req, res) => {
             const expectedCents = Math.round((order.totalPrice + order.shippingCost) * 100);
             if (paymentIntent.amount !== expectedCents) {
                 console.warn(`Webhook amount mismatch for order ${orderId}: expected ${expectedCents}, got ${paymentIntent.amount}`);
+                sendPaymentMismatchAlert({ orderId, expectedCents, actualCents: paymentIntent.amount, source: "webhook" })
+                    .catch(err => console.error("Mismatch alert email failed:", err.message));
+                sendPaymentReviewEmail(order)
+                    .catch(err => console.error("Customer review email failed:", err.message));
                 return res.json({ received: true });
             }
 

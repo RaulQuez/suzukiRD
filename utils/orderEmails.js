@@ -103,3 +103,84 @@ export const sendOrderEmails = async (order) => {
         `.trim(),    
     });
 };
+
+/*
+    Alerts the ADMIN by email when a payment amount doesn't match what the
+    order should cost. This should be rare — it either means a bug in how
+    we calculated totals, or someone tampered with a request. Either way
+    we want to know immediately, not just see it in server logs.
+
+    source = "confirm-payment" | "webhook", so the email tells us which
+    code path caught it.
+
+    Not awaited at the call site (same pattern as sendOrderEmails) — if
+    this email fails to send, that's a shame, but it shouldn't affect the
+    response we send back for the mismatch itself.
+*/
+export const sendPaymentMismatchAlert = async ({ orderId, expectedCents, actualCents, source }) => {
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.CONTACT_GMAIL,
+            pass: process.env.CONTACT_PW,
+        },
+    });
+
+    await transporter.sendMail({
+        from: process.env.CONTACT_GMAIL,
+        to: process.env.CONTACT_GMAIL,
+        subject: `⚠️ Payment amount mismatch — order ${orderId}`,
+        text: `
+    A payment amount didn't match the expected order total.
+
+    ORDER ID: ${orderId}
+    Detected in: ${source}
+    Expected: $${(expectedCents / 100).toFixed(2)}
+    Received: $${(actualCents / 100).toFixed(2)}
+
+    This order was NOT confirmed. Check the Stripe dashboard and the
+    order in the admin panel before doing anything manually.
+        `.trim(),
+    });
+};
+
+/*
+    Tells the CUSTOMER their order needs manual review, in case they close
+    the tab before reading the on-page "Payment Received" message. Deliberately
+    vague on details — no dollar amounts, no mention of "mismatch" — this isn't
+    the place to expose what our verification caught.
+*/
+export const sendPaymentReviewEmail = async (order) => {
+    const { customer, _id } = order;
+    if (!isValidEmail(customer.email)) {
+        console.warn(`Skipping payment-review email for order ${_id}: invalid email`);
+        return;
+    }
+
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.CONTACT_GMAIL,
+            pass: process.env.CONTACT_PW,
+        },
+    });
+
+    await transporter.sendMail({
+        from: process.env.CONTACT_GMAIL,
+        to: cleanHeader(customer.email),
+        subject: `Order ${_id} — we need to verify something`,
+        text: `
+    Hi ${cleanHeader(customer.name)},
+
+    We received your payment, but we need to double-check a few details
+    on your order before we can confirm it. This is usually quick.
+
+    ORDER ID: ${_id}
+
+    Please reply to this email or visit our contact page and reference
+    your order ID, and we'll get this sorted out right away.
+
+    — Suzuki Racing Development
+        `.trim(),
+    });
+};
